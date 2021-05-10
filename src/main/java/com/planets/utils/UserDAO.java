@@ -2,17 +2,19 @@ package com.planets.utils;
 
 import java.sql.*;
 import com.planets.model.User;
+import at.favre.lib.crypto.bcrypt.BCrypt;
 
 public class UserDAO {
     private static final String DB_URL = "jdbc:mysql://localhost/planets";
     private static final String DB_USERNAME = "root";
     private static final String DB_PASSWORD = "root";
+    private static final int BCRYPT_PASS_HASH_COST = 6;
 
     public UserDAO() {
 
     }
 
-    public static User getUserByLoginPassword(String login, String password) {
+    public User getUserByLoginPassword(String login, String password) {
         User user = null;
 
         try{
@@ -23,9 +25,9 @@ public class UserDAO {
                 String sql = "SELECT * FROM users WHERE login = ?, password = ?";
 
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
-
                     preparedStatement.setString(1, login);
-                    preparedStatement.setString(2, password);
+                    String hashedPassword = UserDAO.hashPassword(password);
+                    preparedStatement.setString(2, hashedPassword);
                     ResultSet resultSet = preparedStatement.executeQuery();
 
                     if(resultSet.next()){
@@ -44,14 +46,13 @@ public class UserDAO {
             }
         }
         catch(Exception ex){
-            System.err.println("Connection failed to DataBase in UserDAO.java");
+            System.err.println("Some error with DataBase in UserDAO.java");
             System.err.println(ex);
         }
-
         return user;
     }
 
-    public static int createUser(User newUser) {
+    public int createUser(User newUser) {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
 
@@ -64,17 +65,24 @@ public class UserDAO {
                     preparedStatement.setString(2, newUser.getLastName());
                     preparedStatement.setString(3, newUser.getEmail());
                     preparedStatement.setString(4, newUser.getLogin());
-                    preparedStatement.setString(5, newUser.getPassword());
 
-                    System.out.println(preparedStatement.executeUpdate());
+                    // Get hash with bcrypt
+                    String hashedPassword = UserDAO.hashPassword(newUser.getPassword());
+                    newUser.setPassword(hashedPassword);
+
+                    preparedStatement.setString(5, newUser.getPassword());
                     return preparedStatement.executeUpdate();
                 }
             }
         }
         catch(Exception ex){
-            System.err.println("Connection failed to DataBase in UserDAO.java");
+            System.err.println("Some error with DataBase in UserDAO.java");
             System.err.println(ex);
         }
         return 0;
+    }
+
+    private static String hashPassword(String password) {
+        return BCrypt.withDefaults().hashToString(BCRYPT_PASS_HASH_COST, password.toCharArray());
     }
 }
