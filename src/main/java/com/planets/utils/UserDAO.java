@@ -22,13 +22,13 @@ public class UserDAO {
 
             try (Connection conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)){
 
-                String sql = "SELECT * FROM users WHERE login = ?, password = ?";
+                String sql = "SELECT * FROM users WHERE login = ?";
 
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
                     preparedStatement.setString(1, login);
-                    String hashedPassword = UserDAO.hashPassword(password);
-                    preparedStatement.setString(2, hashedPassword);
                     ResultSet resultSet = preparedStatement.executeQuery();
+
+                    System.out.println(login);
 
                     if(resultSet.next()){
                         int userId = resultSet.getInt(1);
@@ -38,7 +38,11 @@ public class UserDAO {
                         String userLogin = resultSet.getString(5);
                         String userPassword = resultSet.getString(6);
 
-                        user = new User(userFirstName, userLastName, userEmail, userLogin, userPassword);
+                        BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), userPassword);
+
+                        if (result.verified) {
+                            user = new User(userFirstName, userLastName, userEmail, userLogin, userPassword);
+                        }
                     } else {
                         System.err.println("No such user by this login and pass");
                     }
