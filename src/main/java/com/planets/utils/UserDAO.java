@@ -62,9 +62,9 @@ public class UserDAO {
                 try(PreparedStatement preparedStatement = conn.prepareStatement(sql)){
                     preparedStatement.setString(1, newUser.getFirstName());
                     preparedStatement.setString(2, newUser.getLastName());
-                    preparedStatement.setString(3, newUser.getLastName());
-                    preparedStatement.setString(4, newUser.getLastName());
-                    preparedStatement.setString(5, newUser.getLastName());
+                    preparedStatement.setString(3, newUser.getEmail());
+                    preparedStatement.setString(4, newUser.getLogin());
+                    preparedStatement.setString(5, newUser.getPassword());
 
                     System.out.println(preparedStatement.executeUpdate());
                     return preparedStatement.executeUpdate();
