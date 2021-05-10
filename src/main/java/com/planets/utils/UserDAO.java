@@ -17,7 +17,7 @@ public class UserDAO {
     public User getUserByLoginPassword(String login, String password) {
         User user = null;
 
-        try{
+        try {
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
 
             try (Connection conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)){
@@ -45,15 +45,15 @@ public class UserDAO {
                 }
             }
         }
-        catch(Exception ex){
+        catch (Exception exception){
             System.err.println("Some error with DataBase in UserDAO.java");
-            System.err.println(ex);
+            System.err.println(exception);
         }
         return user;
     }
 
     public int createUser(User newUser) {
-        try{
+        try {
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
 
             try (Connection conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)){
@@ -75,11 +75,36 @@ public class UserDAO {
                 }
             }
         }
-        catch(Exception ex){
+        catch (Exception exception){
             System.err.println("Some error with DataBase in UserDAO.java");
-            System.err.println(ex);
+            System.err.println(exception);
         }
         return 0;
+    }
+
+    public boolean isLoginAlreadyExist(String login) {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+
+            try (Connection conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)){
+                String sql = "SELECT * FROM users WHERE login = ?";
+
+                try (PreparedStatement preparedStatement = conn.prepareStatement(sql)){
+                    preparedStatement.setString(1, login);
+                    ResultSet resultSet = preparedStatement.executeQuery();
+
+                    if(resultSet.next()){
+                        return true;
+                    }
+
+                    return false;
+                }
+            }
+        } catch (Exception exception) {
+            System.err.println("Some error with DataBase in UserDAO.java");
+            System.err.println(exception);
+        }
+        return true;
     }
 
     private static String hashPassword(String password) {
