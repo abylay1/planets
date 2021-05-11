@@ -26,7 +26,7 @@ public class SecurityFilter implements Filter {
         HttpSession session = httpServletRequest.getSession();
         User user = (User) session.getAttribute("current-user");
 
-        if (URI.equals("/admin") && user == null) {
+        if ((URI.equals("/admin") || URI.equals("/admin/big-planets") || URI.equals("/admin/small-planets") || URI.equals("/admin/calculate") || URI.equals("/admin/")) && user == null) {
             httpServletResponse.sendRedirect("/admin/login");
             return;
         }
