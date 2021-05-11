@@ -25,6 +25,7 @@ public class HomeServlet extends HttpServlet {
         AtomicReference<PlanetDAO> planetDAOAtomicReference = new AtomicReference<>(new PlanetDAO());
         ArrayList<Planet> planets = planetDAOAtomicReference.get().getAllPlanets();
         request.setAttribute("planets", planets);
+        request.setAttribute("page", "home");
 
         getServletContext().getRequestDispatcher(HOME_JSP).forward(request, response);
     }

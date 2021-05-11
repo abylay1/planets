@@ -25,25 +25,59 @@
     <%--  Navigation  --%>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#" style="color: blue;">Космос</a>
+            <a class="navbar-brand" href="/admin" style="color: blue;">Космос</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/admin">Басты бет <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/admin/small-planets">Үлкен планеталар</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/admin/big-planets">Кіші планеталар</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/admin/calculate">Есептеу</a>
-                    </li>
+                    <c:choose>
+                        <c:when test = "${requestScope.page.equals('home')}">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/admin">Басты бет</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/admin/big-planets">Үлкен планеталар</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/admin/small-planets">Кіші планеталар</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/admin/calculate">Есептеу</a>
+                            </li>
+                        </c:when>
+
+                        <c:when test = "${requestScope.page.equals('big-planets')}">
+                            <li class="nav-item">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/admin">Басты бет</a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/admin/big-planets">Үлкен планеталар</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/admin/small-planets">Кіші планеталар</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/admin/calculate">Есептеу</a>
+                            </li>
+                        </c:when>
+
+                        <c:when test = "${requestScope.page.equals('small-planets')}">
+                            <li class="nav-item">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/admin">Басты бет</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/admin/big-planets">Үлкен планеталар</a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/admin/small-planets">Кіші планеталар</a>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/admin/calculate">Есептеу</a>
+                            </li>
+                        </c:when>
+                    </c:choose>
                 </ul>
                 <div class="user-info" style="color: white; margin-right: 15px">
                     <strong>
@@ -62,7 +96,17 @@
 
     <main>
         <div class="container-fluid">
-            <h1 style="text-align:center; margin-bottom: 20px; margin-top: 30px">Планеталар</h1>
+            <c:choose>
+                <c:when test="${requestScope.page.equals('home')}">
+                    <h1 style="text-align:center; margin-bottom: 20px; margin-top: 30px">Планеталар</h1>
+                </c:when>
+                <c:when test="${requestScope.page.equals('big-planets')}">
+                    <h1 style="text-align:center; margin-bottom: 20px; margin-top: 30px">Үлкен планеталар</h1>
+                </c:when>
+                <c:when test="${requestScope.page.equals('small-planets')}">
+                    <h1 style="text-align:center; margin-bottom: 20px; margin-top: 30px">Кіші планеталар</h1>
+                </c:when>
+            </c:choose>
             <hr>
             <section class="planets" style="margin-bottom: 40px; margin-top: 30px;">
                 <div class="row">
