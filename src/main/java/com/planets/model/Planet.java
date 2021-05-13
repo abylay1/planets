@@ -31,6 +31,15 @@ public class Planet {
         this.image = image;
     }
 
+    public static int calculateDistance(Planet planet1, Planet planet2) {
+        int distanceBetween = planet1.distance - planet2.distance;
+        if (distanceBetween < 0) {
+            return distanceBetween * -1;
+        }
+
+        return distanceBetween;
+    }
+
     public int getID() {
         return ID;
     }
