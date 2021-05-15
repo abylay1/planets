@@ -45,13 +45,12 @@
                     <a class="nav-link" href="${pageContext.request.contextPath}/admin/calculate">Есептеу</a>
                 </li>
             </ul>
-            <div class="user-info" style="color: white; margin-right: 15px">
-                <strong>
+            <div class="user-info" style="color: white; margin-right: 15px; position: relative;">
+                <a href="${pageContext.request.contextPath}/admin/profile" style="">
+                    <i class="bi bi-person-circle"></i>
                     <c:out value="${requestScope.user.firstName}"/>
-                </strong>
-                <strong>
                     <c:out value="${requestScope.user.lastName}"/>
-                </strong>
+                </a>
             </div>
             <div class="logout">
                 <a href="${pageContext.request.contextPath}/admin/logout" class="btn btn-primary" role="button">Выйти</a>
